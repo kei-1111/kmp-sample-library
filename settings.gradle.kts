@@ -33,3 +33,5 @@ include(":shared")
 include(":core:domain")
 include(":core:model")
 include(":core:network")
+
+include(":data")
