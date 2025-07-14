@@ -36,3 +36,5 @@ include(":core:model")
 include(":core:network")
 
 include(":data")
+
+include(":feature:home")

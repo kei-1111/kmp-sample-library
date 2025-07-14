@@ -1,12 +1,10 @@
 import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
-group = "io.github.kei_1111.kmp_sample_library"
-version = "1.0-SNAPSHOT"
-
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.androidLibrary)
+    alias(libs.plugins.kotlinSerialization)
 }
 
 kotlin {
@@ -16,28 +14,27 @@ kotlin {
             jvmTarget.set(JvmTarget.JVM_11)
         }
     }
-    
+
     listOf(
         iosX64(),
         iosArm64(),
         iosSimulatorArm64()
     ).forEach { iosTarget ->
         iosTarget.binaries.framework {
-            baseName = "Shared"
+            baseName = "Home"
             isStatic = true
         }
     }
-    
-    sourceSets {
-        androidMain.dependencies {
-            implementation(libs.koin.android)
-        }
 
+    sourceSets {
         commonMain.dependencies {
+            implementation(libs.kotlinx.serialization.json)
+            implementation(libs.koin.core)
+            implementation(libs.koin.compose)
+            implementation(libs.koin.compose.viewmodel)
+            implementation(projects.core.featurebase)
             implementation(projects.core.model)
-            implementation(projects.core.network)
-            implementation(projects.data)
-            implementation(projects.feature.home)
+            implementation(projects.core.domain)
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
@@ -46,7 +43,7 @@ kotlin {
 }
 
 android {
-    namespace = "io.github.kei_1111.kmp_sample_library.shared"
+    namespace = "io.github.kei_1111.kmp_sample_library.feature.home"
     compileSdk = libs.versions.android.compileSdk.get().toInt()
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
