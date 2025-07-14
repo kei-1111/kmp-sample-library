@@ -31,6 +31,7 @@ dependencyResolutionManagement {
 include(":shared")
 
 include(":core:domain")
+include(":core:featurebase")
 include(":core:model")
 include(":core:network")
 
