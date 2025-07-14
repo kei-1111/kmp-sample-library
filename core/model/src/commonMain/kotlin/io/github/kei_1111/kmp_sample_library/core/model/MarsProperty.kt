@@ -13,4 +13,9 @@ data class MarsProperty(
 )
 
 @Serializable
-enum class PropertyType { BUY, RENT }
+enum class PropertyType {
+    @SerialName("buy")
+    BUY,
+    @SerialName("rent")
+    RENT
+}

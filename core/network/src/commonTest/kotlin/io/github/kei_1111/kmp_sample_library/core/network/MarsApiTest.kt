@@ -26,16 +26,16 @@ class MarsApiTest {
                 content = """
                     [
                         {
-                            "id": "424906",
-                            "price": 8000000,
-                            "type": "BUY",
-                            "img_src": "https://i.imgur.com/gohQ0Ep.jpg"
+                            "price": 450000,
+                            "id": "424905",
+                            "type": "buy",
+                            "img_src": "http://mars.jpl.nasa.gov/msl-raw-images/msss/01000/mcam/1000MR0044631300503690E01_DXXX.jpg"
                         },
                         {
-                            "id": "424907",
-                            "price": 2000,
-                            "type": "RENT",
-                            "img_src": "https://i.imgur.com/exDRZMb.jpg"
+                            "price": 8000000,
+                            "id": "424906",
+                            "type": "rent",
+                            "img_src": "http://mars.jpl.nasa.gov/msl-raw-images/msss/01000/mcam/1000ML0044631300305227E03_DXXX.jpg"
                         }
                     ]
                 """.trimIndent(),
@@ -53,16 +53,16 @@ class MarsApiTest {
         assertEquals(2, properties.size)
         
         val firstProperty = properties[0]
-        assertEquals("424906", firstProperty.id)
-        assertEquals(8000000, firstProperty.price)
+        assertEquals("424905", firstProperty.id)
+        assertEquals(450000, firstProperty.price)
         assertEquals(PropertyType.BUY, firstProperty.type)
-        assertEquals("https://i.imgur.com/gohQ0Ep.jpg", firstProperty.imgSrc)
+        assertEquals("http://mars.jpl.nasa.gov/msl-raw-images/msss/01000/mcam/1000MR0044631300503690E01_DXXX.jpg", firstProperty.imgSrc)
         
         val secondProperty = properties[1]
-        assertEquals("424907", secondProperty.id)
-        assertEquals(2000, secondProperty.price)
+        assertEquals("424906", secondProperty.id)
+        assertEquals(8000000, secondProperty.price)
         assertEquals(PropertyType.RENT, secondProperty.type)
-        assertEquals("https://i.imgur.com/exDRZMb.jpg", secondProperty.imgSrc)
+        assertEquals("http://mars.jpl.nasa.gov/msl-raw-images/msss/01000/mcam/1000ML0044631300305227E03_DXXX.jpg", secondProperty.imgSrc)
 
         client.close()
     }
