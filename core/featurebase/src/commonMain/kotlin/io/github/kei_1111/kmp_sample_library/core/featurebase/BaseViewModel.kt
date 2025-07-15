@@ -14,14 +14,14 @@ import kotlinx.coroutines.launch
 abstract class BaseViewModel<S : State, A : Action, E : Effect>(
     initialState: S,
 ) : ViewModel() {
-    protected val _uiState = MutableStateFlow<S>(initialState)
-    val uiState: StateFlow<S> = _uiState.asStateFlow()
+    protected val _state = MutableStateFlow<S>(initialState)
+    val state: StateFlow<S> = _state.asStateFlow()
 
     protected val _effect = MutableSharedFlow<E>()
     val effect: SharedFlow<E> = _effect.asSharedFlow()
 
     fun updateState(update: (S) -> S) {
-        _uiState.update { update(it) }
+        _state.update { update(it) }
     }
 
     abstract fun onAction(action: A)
