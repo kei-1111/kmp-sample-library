@@ -32,6 +32,7 @@ kotlin {
         dependencies {
             api(projects.feature.home)
             api(projects.core.model)
+            api(projects.core.featurebase)
         }
 
         androidMain.dependencies {
