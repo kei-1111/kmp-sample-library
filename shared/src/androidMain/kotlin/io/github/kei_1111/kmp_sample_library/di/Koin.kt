@@ -8,7 +8,9 @@ import org.koin.android.ext.koin.androidContext
 import org.koin.core.Koin
 import org.koin.core.context.GlobalContext.startKoin
 
-actual fun initKoin(appContext: Any?): Koin = startKoin {
-    appContext?.let { androidContext(it as Context) }
-    modules(networkModule, dataModule, homeModule)
-}.koin
+actual fun initKoin(appContext: Any?) {
+    startKoin {
+        appContext?.let { androidContext(it as Context) }
+        modules(networkModule, dataModule, homeModule)
+    }.koin
+}

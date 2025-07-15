@@ -6,6 +6,8 @@ import io.github.kei_1111.kmp_sample_library.feature.home.di.homeModule
 import org.koin.core.Koin
 import org.koin.core.context.startKoin
 
-actual fun initKoin(appContext: Any?): Koin = startKoin {
-    modules(networkModule, dataModule, homeModule)
-}.koin
+actual fun initKoin(appContext: Any?) {
+    startKoin {
+        modules(networkModule, dataModule, homeModule)
+    }.koin
+}
