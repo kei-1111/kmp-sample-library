@@ -29,6 +29,11 @@ kotlin {
     }
     
     sourceSets {
+        dependencies {
+            api(projects.feature.home)
+            api(projects.core.model)
+        }
+
         androidMain.dependencies {
             implementation(libs.koin.android)
         }
