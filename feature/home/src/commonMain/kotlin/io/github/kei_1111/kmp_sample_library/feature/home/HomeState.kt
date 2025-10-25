@@ -9,7 +9,8 @@ sealed interface HomeState : State {
     data object Loading : HomeState
 
     data class Stable(
-        val marsProperties: List<MarsProperty>
+        val marsProperties: List<MarsProperty>,
+        val selectedProperty: MarsProperty? = null,
     ) : HomeState
 
     data class Error(
