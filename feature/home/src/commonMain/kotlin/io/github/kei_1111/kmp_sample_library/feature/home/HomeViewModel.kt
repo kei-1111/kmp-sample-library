@@ -38,6 +38,14 @@ class HomeViewModel(
                     )
                 }
             }
+
+            is HomeAction.OnDismissMarsPropertyDetailDialog -> {
+                updateViewModelState {
+                    copy(
+                        selectedProperty = null
+                    )
+                }
+            }
         }
     }
 }
