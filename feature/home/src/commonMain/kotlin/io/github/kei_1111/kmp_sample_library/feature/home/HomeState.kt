@@ -8,7 +8,7 @@ sealed interface HomeState : State {
 
     data object Loading : HomeState
 
-    data class Success(
+    data class Stable(
         val marsProperties: List<MarsProperty>
     ) : HomeState
 

@@ -15,7 +15,7 @@ data class HomeViewModelState(
 
         StatusType.LOADING -> HomeState.Loading
 
-        StatusType.STABLE -> HomeState.Success(marsProperties)
+        StatusType.STABLE -> HomeState.Stable(marsProperties)
 
         StatusType.ERROR -> HomeState.Error(errorMessage ?: "Unknown error")
     }
