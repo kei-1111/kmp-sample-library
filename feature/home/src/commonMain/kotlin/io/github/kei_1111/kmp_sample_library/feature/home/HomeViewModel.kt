@@ -30,6 +30,14 @@ class HomeViewModel(
     }
 
     override fun onAction(action: HomeAction) {
-
+        when(action) {
+            is HomeAction.OnClickMarsPropertyCard -> {
+                updateViewModelState {
+                    copy(
+                        selectedProperty = action.marsProperty
+                    )
+                }
+            }
+        }
     }
 }
