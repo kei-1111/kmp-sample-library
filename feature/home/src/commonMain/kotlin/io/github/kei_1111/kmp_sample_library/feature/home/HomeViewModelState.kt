@@ -6,6 +6,7 @@ import io.github.kei_1111.kmp_sample_library.core.model.MarsProperty
 data class HomeViewModelState(
     val statusType: StatusType = StatusType.IDLE,
     val marsProperties: List<MarsProperty> = emptyList(),
+    val selectedProperty: MarsProperty? = null,
     val errorMessage: String? = null
 ) : ViewModelState<HomeState> {
     enum class StatusType { IDLE, LOADING, STABLE, ERROR}
@@ -15,7 +16,10 @@ data class HomeViewModelState(
 
         StatusType.LOADING -> HomeState.Loading
 
-        StatusType.STABLE -> HomeState.Stable(marsProperties)
+        StatusType.STABLE -> HomeState.Stable(
+            marsProperties = marsProperties,
+            selectedProperty = selectedProperty,
+        )
 
         StatusType.ERROR -> HomeState.Error(errorMessage ?: "Unknown error")
     }
