@@ -37,7 +37,7 @@ kotlin {
             implementation(libs.koin.core)
             implementation(libs.koin.compose)
             implementation(libs.koin.compose.viewmodel)
-            implementation(projects.core.featurebase)
+            api(projects.core.featurebase)
             implementation(projects.core.model)
             implementation(projects.core.domain)
         }
