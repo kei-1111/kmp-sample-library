@@ -2,6 +2,7 @@ package io.github.kei_1111.kmp_sample_library.feature.home
 
 import io.github.kei_1111.kmp_sample_library.core.featurebase.stateful.State
 import io.github.kei_1111.kmp_sample_library.core.model.MarsProperty
+import io.github.kei_1111.kmp_sample_library.feature.home.model.MarsPropertyUiModel
 
 sealed interface HomeState : State {
     data object Init : HomeState
@@ -9,8 +10,8 @@ sealed interface HomeState : State {
     data object Loading : HomeState
 
     data class Stable(
-        val marsProperties: List<MarsProperty>,
-        val selectedProperty: MarsProperty? = null,
+        val marsProperties: List<MarsPropertyUiModel>,
+        val selectedProperty: MarsPropertyUiModel? = null,
     ) : HomeState
 
     data class Error(

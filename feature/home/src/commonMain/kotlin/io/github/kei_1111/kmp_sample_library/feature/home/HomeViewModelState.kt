@@ -2,6 +2,7 @@ package io.github.kei_1111.kmp_sample_library.feature.home
 
 import io.github.kei_1111.kmp_sample_library.core.featurebase.stateful.ViewModelState
 import io.github.kei_1111.kmp_sample_library.core.model.MarsProperty
+import io.github.kei_1111.kmp_sample_library.feature.home.model.MarsPropertyUiModel
 
 data class HomeViewModelState(
     val statusType: StatusType = StatusType.IDLE,
@@ -17,8 +18,8 @@ data class HomeViewModelState(
         StatusType.LOADING -> HomeState.Loading
 
         StatusType.STABLE -> HomeState.Stable(
-            marsProperties = marsProperties,
-            selectedProperty = selectedProperty,
+            marsProperties = marsProperties.map { MarsPropertyUiModel.convert(it) },
+            selectedProperty = selectedProperty?.let { MarsPropertyUiModel.convert(it) },
         )
 
         StatusType.ERROR -> HomeState.Error(errorMessage ?: "Unknown error")
