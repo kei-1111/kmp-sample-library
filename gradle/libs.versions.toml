@@ -20,7 +20,7 @@ serialization = "2.2.0"
 serializationJson = "1.8.1"
 
 # kmp-sample-libraryのバージョン
-library = "1.0.7"
+library = "1.0.8"
 
 [libraries]
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
