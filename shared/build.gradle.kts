@@ -3,7 +3,7 @@ import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.gradle.api.publish.PublishingExtension
 
 group = "io.github.kei_1111.kmp_sample_library"
-version = "1.0.2"
+version = "1.0.3"
 
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
@@ -17,7 +17,7 @@ kotlin {
         compilerOptions {
             jvmTarget.set(JvmTarget.JVM_11)
         }
-        publishLibraryVariants("release", "debug")
+        publishLibraryVariants("release")
     }
     
     listOf(
