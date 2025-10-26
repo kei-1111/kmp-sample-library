@@ -2,7 +2,7 @@ import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 group = "io.github.kei_1111.kmp_sample_library"
-version = libs.versions.library
+version = libs.versions.library.get()
 
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
