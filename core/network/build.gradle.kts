@@ -1,10 +1,14 @@
 import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
+group = "io.github.kei_1111.kmp_sample_library"
+version = "1.0.5"
+
 plugins {
     alias(libs.plugins.androidLibrary)
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.kotlinSerialization)
+    alias(libs.plugins.mavenPublish)
 }
 
 kotlin {
@@ -61,5 +65,20 @@ android {
     }
     defaultConfig {
         minSdk = libs.versions.android.minSdk.get().toInt()
+    }
+}
+
+afterEvaluate {
+    extensions.configure<PublishingExtension> {
+        repositories {
+            maven {
+                name = "GitHubPackages"
+                url = uri("https://maven.pkg.github.com/kei-1111/kmp-sample-library")
+                credentials {
+                    username = System.getenv("GITHUB_ACTOR") ?: project.findProperty("gpr.user") as String?
+                    password = System.getenv("GITHUB_TOKEN") ?: project.findProperty("gpr.token") as String?
+                }
+            }
+        }
     }
 }

@@ -3,7 +3,7 @@ import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.gradle.api.publish.PublishingExtension
 
 group = "io.github.kei_1111.kmp_sample_library"
-version = "1.0.4"
+version = "1.0.5"
 
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
@@ -37,8 +37,6 @@ kotlin {
         }
 
         commonMain.dependencies {
-            implementation(projects.core.featurebase)
-            implementation(projects.core.model)
             implementation(projects.core.network)
             implementation(projects.data)
             implementation(projects.feature.home)
