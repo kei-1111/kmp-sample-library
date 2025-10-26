@@ -6,7 +6,7 @@ import io.github.kei_1111.kmp_sample_library.core.model.PropertyType
 data class MarsPropertyUiModel(
     val id: String,
     val price: String,
-    val type: PropertyType,
+    val type: String,
     val imageUrl: String,
 ) {
     companion object {
@@ -17,7 +17,7 @@ data class MarsPropertyUiModel(
             return MarsPropertyUiModel(
                 id = marsProperty.id,
                 price = "$$formattedPrice",
-                type = marsProperty.type,
+                type = marsProperty.type.name,
                 imageUrl = marsProperty.imgSrc,
             )
         }
