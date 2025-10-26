@@ -34,7 +34,7 @@ class HomeViewModel(
             is HomeAction.OnClickMarsPropertyCard -> {
                 updateViewModelState {
                     copy(
-                        selectedProperty = action.marsProperty
+                        selectedProperty = _viewModelState.value.marsProperties.find { it.id == action.marsProperty.id }
                     )
                 }
             }
