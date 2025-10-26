@@ -3,7 +3,7 @@ import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.gradle.api.publish.PublishingExtension
 
 group = "io.github.kei_1111.kmp_sample_library"
-version = "1.0.5"
+version = "1.0.6"
 
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
