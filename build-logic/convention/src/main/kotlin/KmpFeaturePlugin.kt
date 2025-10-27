@@ -10,7 +10,6 @@ class KmpFeaturePlugin : Plugin<Project> {
     override fun apply(target: Project) {
         with(target) {
             apply(plugin = "kmp.sample.library.kmp.library")
-            apply(plugin = "org.jetbrains.kotlin.plugin.serialization")
 
             extensions.configure<KotlinMultiplatformExtension> {
                 sourceSets.apply {
