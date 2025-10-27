@@ -27,7 +27,7 @@ dependencyResolutionManagement {
         mavenCentral()
     }
 }
-
+includeBuild("build-logic")
 include(":shared")
 
 include(":core:domain")
