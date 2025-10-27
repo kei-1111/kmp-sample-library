@@ -11,4 +11,5 @@ plugins {
     // kmp-sample-library
     alias(libs.plugins.kmp.sample.library.android) apply false
     alias(libs.plugins.kmp.sample.library.kmp.library) apply false
+    alias(libs.plugins.kmp.sample.library.kmp.feature) apply false
 }

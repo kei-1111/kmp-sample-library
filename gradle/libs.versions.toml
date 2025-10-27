@@ -66,3 +66,4 @@ mavenPublish = { id = "maven-publish" }
 # kmp-sample-library
 kmp-sample-library-android = { id = "kmp.sample.library.android" }
 kmp-sample-library-kmp-library = { id = "kmp.sample.library.kmp.library" }
+kmp-sample-library-kmp-feature = { id = "kmp.sample.library.kmp.feature" }

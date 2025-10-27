@@ -34,5 +34,9 @@ gradlePlugin {
             id = libs.plugins.kmp.sample.library.kmp.library.get().pluginId
             implementationClass = "KmpLibraryPlugin"
         }
+        register("kmpFeature") {
+            id = libs.plugins.kmp.sample.library.kmp.feature.get().pluginId
+            implementationClass = "KmpFeaturePlugin"
+        }
     }
 }
