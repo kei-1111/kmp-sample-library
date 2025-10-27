@@ -10,6 +10,9 @@ import org.gradle.kotlin.dsl.getByType
 internal fun DependencyHandler.implementation(dependencyNotation: Any): Dependency? =
     add("implementation", dependencyNotation)
 
+internal fun DependencyHandler.api(dependencyNotation: Any): Dependency? =
+    add("api", dependencyNotation)
+
 internal val Project.libs
     get(): VersionCatalog = extensions.getByType<VersionCatalogsExtension>().named("libs")
 
