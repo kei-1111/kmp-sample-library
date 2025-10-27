@@ -13,6 +13,7 @@ class KmpLibraryPlugin : Plugin<Project> {
         with(target) {
             apply(plugin = "org.jetbrains.kotlin.multiplatform")
             apply(plugin = "kmp.sample.library.android")
+            apply(plugin = "kmp.sample.library.publish")
 
             extensions.configure<KotlinMultiplatformExtension> {
                 androidTarget {
