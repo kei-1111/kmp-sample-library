@@ -1,0 +1,75 @@
+name: Release XCFramework
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  release:
+    runs-on: macos-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+
+      - name: Build and Package XCFrameworks
+        run: |
+          ./gradlew :shared:packageXCFramework :feature:home:packageXCFramework
+
+      - name: Read checksums
+        id: checksums
+        run: |
+          SHARED_CHECKSUM=$(cat shared/build/outputs/checksum.txt)
+          HOME_CHECKSUM=$(cat feature/home/build/outputs/checksum.txt)
+          echo "shared_checksum=$SHARED_CHECKSUM" >> $GITHUB_OUTPUT
+          echo "home_checksum=$HOME_CHECKSUM" >> $GITHUB_OUTPUT
+          echo "📋 Shared Checksum: $SHARED_CHECKSUM"
+          echo "📋 Home Checksum: $HOME_CHECKSUM"
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: |
+            shared/build/outputs/Shared.xcframework.zip
+            feature/home/build/outputs/Home.xcframework.zip
+          body: |
+            ## KMP Sample Library Release
+
+            ### Swift Package Manager
+
+            Xcodeでこのライブラリを使用するには、以下の手順で追加してください：
+
+            1. Xcode → File → Add Package Dependencies
+            2. リポジトリURL: `https://github.com/kei-1111/kmp-sample-library`
+            3. バージョン: `${{ github.ref_name }}`を選択
+            4. 使用したいライブラリを選択（SharedまたはHome）
+
+            ### XCFramework Checksums
+
+            **Shared:**
+            ```
+            ${{ steps.checksums.outputs.shared_checksum }}
+            ```
+
+            **Home:**
+            ```
+            ${{ steps.checksums.outputs.home_checksum }}
+            ```
+
+            Package.swiftファイルを手動で更新する場合は、上記のchecksumを使用してください。
+          draft: false
+          prerelease: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
