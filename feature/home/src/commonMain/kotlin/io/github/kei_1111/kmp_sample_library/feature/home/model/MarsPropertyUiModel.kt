@@ -6,9 +6,13 @@ import io.github.kei_1111.kmp_sample_library.core.model.PropertyType
 data class MarsPropertyUiModel(
     val id: String,
     val price: String,
-    val type: String,
+    val type: PropertyTypeUiModel,
     val imageUrl: String,
 ) {
+    enum class PropertyTypeUiModel {
+        BUY, RENT
+    }
+
     companion object {
         fun convert(marsProperty: MarsProperty): MarsPropertyUiModel {
             val reversedPrice = marsProperty.price.toString().reversed()
@@ -17,7 +21,10 @@ data class MarsPropertyUiModel(
             return MarsPropertyUiModel(
                 id = marsProperty.id,
                 price = "$$formattedPrice",
-                type = marsProperty.type.name,
+                type = when(marsProperty.type) {
+                    PropertyType.BUY -> PropertyTypeUiModel.BUY
+                    PropertyType.RENT -> PropertyTypeUiModel.RENT
+                },
                 imageUrl = marsProperty.imgSrc,
             )
         }
