@@ -9,8 +9,8 @@ sealed interface HomeUiState : UiState {
     data object Loading : HomeUiState
 
     data class Stable(
-        val marsProperties: List<MarsPropertyUiModel>,
-        val selectedProperty: MarsPropertyUiModel? = null,
+        val marsPropertyUiModels: List<MarsPropertyUiModel>,
+        val selectedPropertyUiModel: MarsPropertyUiModel? = null,
     ) : HomeUiState
 
     data class Error(

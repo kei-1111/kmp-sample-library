@@ -18,8 +18,8 @@ data class HomeViewModelState(
         StatusType.LOADING -> HomeUiState.Loading
 
         StatusType.STABLE -> HomeUiState.Stable(
-            marsProperties = marsProperties.map { MarsPropertyUiModel.convert(it) },
-            selectedProperty = selectedProperty?.let { MarsPropertyUiModel.convert(it) },
+            marsPropertyUiModels = marsProperties.map { MarsPropertyUiModel.convert(it) },
+            selectedPropertyUiModel = selectedProperty?.let { MarsPropertyUiModel.convert(it) },
         )
 
         StatusType.ERROR -> HomeUiState.Error(errorMessage ?: "Unknown error")
