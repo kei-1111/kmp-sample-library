@@ -9,19 +9,19 @@ data class HomeViewModelState(
     val marsProperties: List<MarsProperty> = emptyList(),
     val selectedProperty: MarsProperty? = null,
     val errorMessage: String? = null
-) : ViewModelState<HomeState> {
+) : ViewModelState<HomeUiState> {
     enum class StatusType { IDLE, LOADING, STABLE, ERROR}
 
     override fun toState() = when (statusType) {
-        StatusType.IDLE -> HomeState.Init
+        StatusType.IDLE -> HomeUiState.Init
 
-        StatusType.LOADING -> HomeState.Loading
+        StatusType.LOADING -> HomeUiState.Loading
 
-        StatusType.STABLE -> HomeState.Stable(
+        StatusType.STABLE -> HomeUiState.Stable(
             marsProperties = marsProperties.map { MarsPropertyUiModel.convert(it) },
             selectedProperty = selectedProperty?.let { MarsPropertyUiModel.convert(it) },
         )
 
-        StatusType.ERROR -> HomeState.Error(errorMessage ?: "Unknown error")
+        StatusType.ERROR -> HomeUiState.Error(errorMessage ?: "Unknown error")
     }
 }

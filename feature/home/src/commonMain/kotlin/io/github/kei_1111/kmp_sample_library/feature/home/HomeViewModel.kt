@@ -7,10 +7,10 @@ import kotlinx.coroutines.launch
 
 class HomeViewModel(
     private val marsRepository: MarsRepository,
-) : StatefulBaseViewModel<HomeViewModelState, HomeState, HomeAction, HomeEffect>() {
+) : StatefulBaseViewModel<HomeViewModelState, HomeUiState, HomeUiAction, HomeUiEffect>() {
 
     override fun createInitialViewModelState(): HomeViewModelState = HomeViewModelState()
-    override fun createInitialState(): HomeState = HomeState.Init
+    override fun createInitialUiState(): HomeUiState = HomeUiState.Init
 
     init {
         loadMarsProperties()
@@ -29,9 +29,9 @@ class HomeViewModel(
         }
     }
 
-    override fun onAction(action: HomeAction) {
+    override fun onAction(action: HomeUiAction) {
         when(action) {
-            is HomeAction.OnClickMarsPropertyCard -> {
+            is HomeUiAction.OnClickMarsPropertyCard -> {
                 updateViewModelState {
                     copy(
                         selectedProperty = _viewModelState.value.marsProperties.find { it.id == action.marsProperty.id }
@@ -39,7 +39,7 @@ class HomeViewModel(
                 }
             }
 
-            is HomeAction.OnDismissMarsPropertyDetailDialog -> {
+            is HomeUiAction.OnDismissMarsPropertyDetailDialog -> {
                 updateViewModelState {
                     copy(
                         selectedProperty = null

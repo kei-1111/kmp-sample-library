@@ -2,25 +2,20 @@ package io.github.kei_1111.kmp_sample_library.core.featurebase.stateful
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import io.github.kei_1111.kmp_sample_library.core.featurebase.Action
-import io.github.kei_1111.kmp_sample_library.core.featurebase.Effect
+import io.github.kei_1111.kmp_sample_library.core.featurebase.UiAction
+import io.github.kei_1111.kmp_sample_library.core.featurebase.UiEffect
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asSharedFlow
-import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
-import kotlinx.coroutines.launch
 
 @Suppress("VariableNaming")
-abstract class StatefulBaseViewModel<VS : ViewModelState<S>, S : State, A : Action, E : Effect> : ViewModel() {
+abstract class StatefulBaseViewModel<VS : ViewModelState<S>, S : UiState, A : UiAction, E : UiEffect> : ViewModel() {
 
     protected val _viewModelState = MutableStateFlow<VS>(createInitialViewModelState())
 
@@ -29,7 +24,7 @@ abstract class StatefulBaseViewModel<VS : ViewModelState<S>, S : State, A : Acti
         .stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(STOP_TIMEOUT_MILLIS),
-            initialValue = createInitialState(),
+            initialValue = createInitialUiState(),
         )
 
     protected val _effect = Channel<E>(Channel.BUFFERED)
@@ -38,7 +33,7 @@ abstract class StatefulBaseViewModel<VS : ViewModelState<S>, S : State, A : Acti
 
     protected abstract fun createInitialViewModelState(): VS
 
-    protected abstract fun createInitialState(): S
+    protected abstract fun createInitialUiState(): S
 
     abstract fun onAction(action: A)
 

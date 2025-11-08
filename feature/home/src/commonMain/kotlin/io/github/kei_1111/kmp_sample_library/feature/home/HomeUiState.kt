@@ -1,20 +1,19 @@
 package io.github.kei_1111.kmp_sample_library.feature.home
 
-import io.github.kei_1111.kmp_sample_library.core.featurebase.stateful.State
-import io.github.kei_1111.kmp_sample_library.core.model.MarsProperty
+import io.github.kei_1111.kmp_sample_library.core.featurebase.stateful.UiState
 import io.github.kei_1111.kmp_sample_library.feature.home.model.MarsPropertyUiModel
 
-sealed interface HomeState : State {
-    data object Init : HomeState
+sealed interface HomeUiState : UiState {
+    data object Init : HomeUiState
 
-    data object Loading : HomeState
+    data object Loading : HomeUiState
 
     data class Stable(
         val marsProperties: List<MarsPropertyUiModel>,
         val selectedProperty: MarsPropertyUiModel? = null,
-    ) : HomeState
+    ) : HomeUiState
 
     data class Error(
         val message: String
-    ) : HomeState
+    ) : HomeUiState
 }
