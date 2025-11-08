@@ -43,6 +43,60 @@ jobs:
           echo "📋 Shared Checksum: $SHARED_CHECKSUM"
           echo "📋 Home Checksum: $HOME_CHECKSUM"
 
+      - name: Update Package.swift with checksums
+        run: |
+          VERSION="${GITHUB_REF_NAME#v}"
+          SHARED_CHECKSUM=$(cat shared/build/outputs/checksum.txt)
+          HOME_CHECKSUM=$(cat feature/home/build/outputs/checksum.txt)
+
+          # Package.swiftのバージョンとチェックサムを更新
+          sed -i.bak "s|/releases/download/v[0-9.]*|/releases/download/v${VERSION}|g" Package.swift
+
+          # awkを使用してSharedとHomeのチェックサムを個別に更新
+          awk -v shared_checksum="$SHARED_CHECKSUM" -v home_checksum="$HOME_CHECKSUM" '
+          /name: "Shared"/ { in_shared = 1 }
+          /name: "Home"/ { in_shared = 0; in_home = 1 }
+          /checksum:/ {
+              if (in_shared) {
+                  print "            checksum: \"" shared_checksum "\""
+                  in_shared = 0
+                  next
+              } else if (in_home) {
+                  print "            checksum: \"" home_checksum "\""
+                  in_home = 0
+                  next
+              }
+          }
+          { print }
+          ' Package.swift > Package.swift.tmp
+
+          mv Package.swift.tmp Package.swift
+          rm -f Package.swift.bak
+
+          echo "✅ Package.swift を更新しました"
+
+      - name: Commit and push Package.swift
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git add Package.swift
+
+          # Package.swiftに変更があればコミット
+          if ! git diff --staged --quiet; then
+            git commit -m "chore: Package.swiftを${{ github.ref_name }}のチェックサムで更新"
+
+            # タグを新しいコミットに移動
+            git tag -f ${{ github.ref_name }}
+
+            # プッシュ（タグも強制更新）
+            git push origin HEAD:main
+            git push -f origin ${{ github.ref_name }}
+
+            echo "✅ Package.swiftをコミットしてタグを更新しました"
+          else
+            echo "ℹ️ Package.swiftに変更がありませんでした"
+          fi
+
       - name: Create Release
         uses: softprops/action-gh-release@v1
         with:
