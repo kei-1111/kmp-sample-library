@@ -37,23 +37,32 @@ echo "🔑 Shared Checksum: $SHARED_CHECKSUM"
 echo "🔑 Home Checksum: $HOME_CHECKSUM"
 
 # Package.swiftを更新（複数のバイナリターゲットに対応）
-# まずバージョンを更新
-sed -i.bak \
-    -e "s|/releases/download/v[0-9.]*|/releases/download/v${VERSION}|g" \
-    "$PACKAGE_SWIFT"
+# 一時ファイルを使用して更新
+TEMP_FILE=$(mktemp)
 
-# Sharedのchecksumを更新
-sed -i.bak \
-    -e "/name: \"Shared\"/,/checksum:/ s|checksum: \"[^\"]*\"|checksum: \"${SHARED_CHECKSUM}\"|" \
-    "$PACKAGE_SWIFT"
+# バージョンを更新
+sed "s|/releases/download/v[0-9.]*|/releases/download/v${VERSION}|g" "$PACKAGE_SWIFT" > "$TEMP_FILE"
 
-# Homeのchecksumを更新
-sed -i.bak \
-    -e "/name: \"Home\"/,/checksum:/ s|checksum: \"[^\"]*\"|checksum: \"${HOME_CHECKSUM}\"|" \
-    "$PACKAGE_SWIFT"
+# SharedとHomeのchecksumを個別に更新（awkを使用）
+awk -v shared_checksum="$SHARED_CHECKSUM" -v home_checksum="$HOME_CHECKSUM" '
+/name: "Shared"/ { in_shared = 1 }
+/name: "Home"/ { in_shared = 0; in_home = 1 }
+/checksum:/ {
+    if (in_shared) {
+        print "            checksum: \"" shared_checksum "\""
+        in_shared = 0
+        next
+    } else if (in_home) {
+        print "            checksum: \"" home_checksum "\""
+        in_home = 0
+        next
+    }
+}
+{ print }
+' "$TEMP_FILE" > "$PACKAGE_SWIFT"
 
-# バックアップファイルを削除
-rm -f "${PACKAGE_SWIFT}.bak"
+# 一時ファイルを削除
+rm -f "$TEMP_FILE"
 
 echo "✅ Package.swift を更新しました"
 echo ""
