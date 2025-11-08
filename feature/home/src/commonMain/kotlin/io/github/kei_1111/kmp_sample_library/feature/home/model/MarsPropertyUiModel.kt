@@ -9,10 +9,6 @@ data class MarsPropertyUiModel(
     val type: PropertyTypeUiModel,
     val imageUrl: String,
 ) {
-    enum class PropertyTypeUiModel {
-        BUY, RENT
-    }
-
     companion object {
         fun convert(marsProperty: MarsProperty): MarsPropertyUiModel {
             val reversedPrice = marsProperty.price.toString().reversed()
@@ -29,4 +25,8 @@ data class MarsPropertyUiModel(
             )
         }
     }
+}
+
+enum class PropertyTypeUiModel {
+    BUY, RENT
 }
