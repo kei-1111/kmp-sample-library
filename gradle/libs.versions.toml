@@ -13,6 +13,7 @@ coroutines = "1.9.0"
 kotlin = "2.2.0"
 koin = "4.1.0"
 ktor = "3.2.0"
+skie = "0.10.6"
 serialization = "2.2.0"
 serializationJson = "1.8.1"
 
@@ -55,6 +56,7 @@ compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "
 kotlin-multiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "serialization" }
 maven-publish = { id = "maven-publish" }
+skie = { id = "co.touchlab.skie", version.ref = "skie" }
 
 # kmp-sample-library
 kmp-sample-library-android = { id = "kmp.sample.library.android" }

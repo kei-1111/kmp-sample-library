@@ -7,6 +7,7 @@ plugins {
     alias(libs.plugins.compose.compiler) apply false
     alias(libs.plugins.kotlin.multiplatform) apply false
     alias(libs.plugins.kotlin.serialization) apply false
+    alias(libs.plugins.skie) apply false
 
     // kmp-sample-library
     alias(libs.plugins.kmp.sample.library.android) apply false
