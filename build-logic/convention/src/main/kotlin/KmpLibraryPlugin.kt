@@ -13,6 +13,7 @@ class KmpLibraryPlugin : Plugin<Project> {
     override fun apply(target: Project) {
         with(target) {
             apply(plugin = "org.jetbrains.kotlin.multiplatform")
+            apply(plugin = "skie")
             apply(plugin = "kmp.sample.library.android")
             apply(plugin = "kmp.sample.library.publish")
 
