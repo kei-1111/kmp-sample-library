@@ -151,50 +151,48 @@ struct YourApp: App {
 
 ## リリース手順
 
-新しいバージョンをリリースする際の手順です。
+新しいバージョンをリリースする際の手順です。**完全自動化されているため、非常にシンプルです。**
 
-### 1. XCFrameworkをビルド
+### 1. バージョンを更新
 
-```bash
-./gradlew :shared:packageXCFramework :feature:home:packageXCFramework
+`gradle/libs.versions.toml`でライブラリのバージョンを更新します：
+
+```toml
+[versions]
+# ...
+library = "1.3.0"  # 新しいバージョンに変更
 ```
 
-### 2. Package.swiftを更新
+### 2. 変更をコミット＆プッシュ
 
 ```bash
-# 自動更新スクリプトを使用
-./scripts/update-package-swift.sh 1.2.0
-
-# または手動で以下を更新:
-# - url: バージョンタグを新しいバージョンに変更
-# - checksum: ビルドしたXCFrameworkのchecksumに更新
-#   - Shared: shared/build/outputs/checksum.txt
-#   - Home: feature/home/build/outputs/checksum.txt
+git add gradle/libs.versions.toml
+git commit -m "chore: バージョンを1.3.0に更新"
+git push origin main
 ```
 
-### 3. 変更をコミットしてタグを作成
+### 3. タグを作成してプッシュ
 
 ```bash
-# Package.swiftの変更を確認
-git diff Package.swift
-
-# コミット
-git add Package.swift
-git commit -m "chore: Package.swiftをv1.2.0に更新"
-
-# タグを作成
-git tag v1.2.0
-
-# プッシュ（タグも含む）
-git push origin main --tags
+git tag v1.3.0
+git push origin --tags
 ```
 
-### 4. GitHub Actionsが自動実行
+**これだけです！** あとはGitHub Actionsが自動的にすべて実行します。
+
+### 4. GitHub Actionsが自動実行（完全自動化）
 
 タグがプッシュされると、GitHub Actions（`.github/workflows/release.yml`）が自動的に:
-1. SharedとHomeのXCFrameworkをビルド
-2. GitHub Releaseを作成
-3. 両方のXCFrameworkのzipファイルを添付
+
+1. ✅ XCFramework（SharedとHome）をビルド
+2. ✅ チェックサムを計算
+3. ✅ **Package.swiftを自動更新**（正しいチェックサム値で）
+4. ✅ 変更をコミット＆プッシュ
+5. ✅ タグを最新のコミットに移動
+6. ✅ GitHub Releaseを作成
+7. ✅ XCFrameworkのzipファイルをリリースに添付
+
+**手動でXCFrameworkをビルドしたり、Package.swiftを更新したりする必要は一切ありません。**
 
 ### 5. リリースを確認
 
