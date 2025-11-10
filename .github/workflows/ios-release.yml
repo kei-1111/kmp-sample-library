@@ -31,7 +31,7 @@ jobs:
 
       - name: Build and Package XCFramework
         run: |
-          ./gradlew :shared:packageXCFramework
+          ./gradlew :shared:packageXCFramework --no-configuration-cache
 
       - name: Read checksum
         id: checksum
