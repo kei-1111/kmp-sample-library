@@ -1,3 +1,6 @@
+import org.jetbrains.kotlin.gradle.plugin.mpp.Framework
+import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget
+
 plugins {
     alias(libs.plugins.kmp.sample.library.kmp.library)
     alias(libs.plugins.skie)
@@ -12,7 +15,16 @@ kotlin {
         commonMain.dependencies {
             implementation(projects.core.network)
             implementation(projects.data)
-            implementation(projects.feature.home)
+            api(projects.feature.home)
+        }
+    }
+}
+
+// KmpLibraryPluginが作成したフレームワークにexportを追加
+afterEvaluate {
+    kotlin.targets.withType<KotlinNativeTarget>().configureEach {
+        binaries.withType<Framework>().configureEach {
+            export(projects.feature.home)
         }
     }
 }
