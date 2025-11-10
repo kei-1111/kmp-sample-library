@@ -2,8 +2,6 @@ name: iOS Release
 
 on:
   push:
-    branches:
-      - main
     tags:
       - 'v*'
 
