@@ -58,17 +58,17 @@ kmp-sample-library/
 ├── core/                      # 基盤レイヤー
 │   ├── model/                 # kotlinx.serializationを使用したデータモデル
 │   ├── domain/                # ビジネスロジックのインターフェースと契約
+│   ├── data/                  # リポジトリの実装
 │   ├── network/               # HTTPクライアント（Ktor）の抽象化
 │   └── featurebase/           # フィーチャーモジュール用のベースViewModel
-├── data/                      # リポジトリの実装
 └── feature/                   # フィーチャー固有のモジュール（UI/ビジネスロジック）
     └── home/                  # フィーチャーモジュールの例
 ```
 
 **依存関係のフロー（Clean Architectureに従う）:**
 - `feature:home` → `core:featurebase` → `core:domain` → `core:model`
-- `data` → `core:domain`, `core:model`, `core:network`
-- `shared` → `feature:home`, `data`, `core:network`
+- `core:data` → `core:domain`, `core:model`, `core:network`
+- `shared` → `feature:home`, `core:data`, `core:network`
 
 ### build-logic Convention Plugins
 
@@ -82,7 +82,7 @@ kmp-sample-library/
    - 全ライブラリモジュールのベースプラグイン
    - マルチプラットフォームターゲットを設定: androidTarget, iosX64, iosArm64, iosSimulatorArm64
    - AndroidPluginとPublishPluginを自動適用
-   - 用途: coreモジュール、dataモジュール、sharedモジュール
+   - 用途: coreモジュール、sharedモジュール
 
 3. **`kmp.sample.library.kmp.feature`** (`KmpFeaturePlugin`)
    - フィーチャーモジュール用にKmpLibraryPluginを拡張

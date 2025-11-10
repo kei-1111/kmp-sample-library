@@ -17,5 +17,5 @@ kotlin {
 }
 
 android {
-    namespace = "io.github.kei_1111.kmp_sample_library.data"
+    namespace = "io.github.kei_1111.kmp_sample_library.core.data"
 }

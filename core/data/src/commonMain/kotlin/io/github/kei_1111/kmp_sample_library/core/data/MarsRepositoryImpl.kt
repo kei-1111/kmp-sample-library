@@ -1,4 +1,4 @@
-package io.github.kei_1111.kmp_sample_library.data
+package io.github.kei_1111.kmp_sample_library.core.data
 
 import io.github.kei_1111.kmp_sample_library.core.domain.data.MarsRepository
 import io.github.kei_1111.kmp_sample_library.core.domain.network.MarsApiService

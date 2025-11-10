@@ -17,7 +17,7 @@ kotlin {
 
         commonMain.dependencies {
             implementation(projects.core.network)
-            implementation(projects.data)
+            implementation(projects.core.data)
 
             // iOSにexportするため、apiを使用
             api(projects.feature.home)

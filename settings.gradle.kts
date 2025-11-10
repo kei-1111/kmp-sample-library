@@ -30,11 +30,10 @@ dependencyResolutionManagement {
 includeBuild("build-logic")
 include(":shared")
 
+include(":core:data")
 include(":core:domain")
 include(":core:featurebase")
 include(":core:model")
 include(":core:network")
-
-include(":data")
 
 include(":feature:home")
