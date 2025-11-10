@@ -5,23 +5,26 @@
 ## 目次
 
 1. [提供されているライブラリ](#提供されているライブラリ)
-2. [ローカル開発での使用](#ローカル開発での使用)
-3. [Swift Package Managerでの使用（リモート）](#swift-package-managerでの使用リモート)
-4. [リリース手順](#リリース手順)
-5. [トラブルシューティング](#トラブルシューティング)
+2. [ローカル開発での依存追加](#ローカル開発での使用)
+3. [Swift Package Managerでの依存追加（リモート）](#swift-package-managerでの使用リモート)
+4. [Swiftから使用](#swiftから使用)
+5. [リリース手順](#リリース手順)
+6. [トラブルシューティング](#トラブルシューティング)
 
 ---
 
 ## 提供されているライブラリ
 
-このプロジェクトでは、以下の2つのXCFrameworkを提供しています：
+このプロジェクトでは、以下のXCFrameworkを提供しています：
 
-- **Shared** - Koinの初期化などアプリケーションのエントリーポイント（必須）
-- **Home** - ホーム画面を形作るためのフィーチャーモジュール
+- **Shared** - すべての機能を含む統合ライブラリ
 
-**重要**: アプリケーションを構築するには、通常 **Shared** と **Home** の両方が必要です。
-- **Shared** は依存性注入（Koin）の初期化などアプリ全体の基盤を提供
-- **Home** はホーム画面のUI/ビジネスロジックを提供
+**Sharedモジュールに含まれるもの：**
+- 依存性注入（Koin）の初期化などアプリ全体の基盤
+- Homeなどのフィーチャーモジュール
+- その他すべてのKMPライブラリの機能
+
+**重要**: **Sharedのみ**を追加すれば、すべてのViewModelにアクセスすることができるためUIの作成のみになります。
 
 ---
 
@@ -31,17 +34,8 @@
 
 ### 1. XCFrameworkをビルド
 
-#### 両方を一度にビルド（推奨）
-
 ```bash
-./gradlew :shared:packageXCFramework :feature:home:packageXCFramework
-```
-
-#### 個別にビルド
-
-Sharedをビルド:
-```bash
-./gradlew :shared:packageXCFramework
+./gradlew :shard:assembleSharedReleaseXCFramework
 ```
 
 ビルドされたファイル:
@@ -49,59 +43,15 @@ Sharedをビルド:
 - `shared/build/outputs/Shared.xcframework.zip`
 - `shared/build/outputs/checksum.txt`
 
-Homeをビルド:
-```bash
-./gradlew :feature:home:packageXCFramework
-```
-
-ビルドされたファイル:
-- `feature/home/build/XCFrameworks/release/Home.xcframework`
-- `feature/home/build/outputs/Home.xcframework.zip`
-- `feature/home/build/outputs/checksum.txt`
-
 ### 2. iOSプロジェクトに追加
-
-**両方のXCFrameworkを追加する必要があります：**
 
 1. Xcodeで対象のiOSプロジェクトを開く
 2. プロジェクトナビゲーターでプロジェクトファイルを選択
 3. ターゲットを選択 → `General` タブ
 4. `Frameworks, Libraries, and Embedded Content` セクションで `+` をクリック
 5. `Add Other...` → `Add Files...` を選択
-6. まず `shared/build/XCFrameworks/release/Shared.xcframework` を選択
+6. `shared/build/XCFrameworks/release/Shared.xcframework` を選択
 7. `Embed & Sign` に設定
-8. 再度 `+` をクリックして、`feature/home/build/XCFrameworks/release/Home.xcframework` を追加
-9. こちらも `Embed & Sign` に設定
-
-### 3. Swiftから使用
-
-```swift
-import Shared
-import Home
-
-// アプリのエントリーポイント
-@main
-struct YourApp: App {
-    init() {
-        // Sharedを使ってKoinを初期化（必須）
-        KoinKt.initKoin(appContext: nil)
-    }
-
-    var body: some Scene {
-        WindowGroup {
-            ContentView()
-        }
-    }
-}
-
-// ContentViewなどでHomeモジュールを使用
-struct ContentView: View {
-    var body: some View {
-        // Homeモジュールの画面やコンポーネントを使用
-        Text("Home Screen")
-    }
-}
-```
 
 ---
 
@@ -120,29 +70,76 @@ GitHubリリースからXCFrameworkを取得して使用します。
 1. Xcodeでプロジェクトを開く
 2. File → Add Package Dependencies
 3. 右上の検索バーに入力: `https://github.com/kei-1111/kmp-sample-library`
-4. バージョンを選択（例: `1.1.1`）
+4. バージョンを選択（例: `1.3.0`）
 5. `Add Package` をクリック
-6. **両方のライブラリを選択**: `Shared` と `Home`
+6. **ライブラリを選択**: `Shared`
 7. ターゲットに追加
 
-### 2. Swiftから使用
+---
+
+## Swiftから使用
 
 ```swift
 import Shared
-import Home
 
-// Sharedを使ってKoinを初期化
+// アプリのエントリーポイント
 @main
 struct YourApp: App {
     init() {
+        // Koinを初期化（必須）
         KoinKt.initKoin(appContext: nil)
     }
 
     var body: some Scene {
         WindowGroup {
-            // Homeモジュールを使用
             ContentView()
         }
+    }
+}
+
+
+import Shared
+
+// ViewModelの値をObserve（:feature:homeのHomeViewModel）
+@MainActor
+class HomeViewModelObserver: ObservableObject {
+    var viewModel: HomeViewModel = ViewModelProvider.shared.provideHomeViewModel()
+    @Published var state: HomeUiState = HomeUiStateInit()
+
+    func startObserving() async {
+        for await newState in viewModel.state {
+            self.state = newState
+        }
+    }
+}
+
+
+import Shared
+
+// Observeした値を使用
+struct HomeScreen: View {
+    @StateObject private var observer = HomeViewModelObserver()
+
+    var body: some View {
+        VStack(spacing: 20) {
+            switch observer.state {
+            case is HomeUiStateInit:
+                Text("Welcome to Home Screen")
+
+            case is HomeUiStateLoading:
+                Text("Loading...")
+
+            case let stable as HomeUiStateStable:
+                Text("Stable State")
+
+            case let error as HomeUiStateError:
+                Text("Error")
+
+            default:
+                Text("Unknown State")
+            }
+        }
+        .task { await observer.startObserving() }
     }
 }
 ```
@@ -182,9 +179,9 @@ git push origin --tags
 
 ### 4. GitHub Actionsが自動実行（完全自動化）
 
-タグがプッシュされると、GitHub Actions（`.github/workflows/release.yml`）が自動的に:
+タグがプッシュされると、GitHub Actions（`.github/workflows/ios-release.yml`）が自動的に:
 
-1. ✅ XCFramework（SharedとHome）をビルド
+1. ✅ XCFramework（Shared）をビルド
 2. ✅ チェックサムを計算
 3. ✅ **Package.swiftを自動更新**（正しいチェックサム値で）
 4. ✅ 変更をコミット＆プッシュ
@@ -227,7 +224,7 @@ sudo xcode-select --switch /Applications/Xcode-16.4.0.app/Contents/Developer
 
 XCFrameworkをビルドし直した後:
 1. Xcodeを終了
-2. 両方のXCFrameworkを再ビルド
+2. XCFrameworkを再ビルド: `./gradlew :shard:assembleSharedReleaseXCFramework`
 3. Xcodeで該当のXCFrameworkを削除して再度追加
 4. Derived Dataを削除
 5. Xcodeを再起動
@@ -239,13 +236,28 @@ XCFrameworkをビルドし直した後:
 - アプリ起動時（`App`の`init()`内）で `KoinKt.initKoin(appContext: nil)` を呼び出しているか確認
 - `import Shared` が正しくインポートされているか確認
 
-### Homeモジュールでクラスが見つからない
+### フィーチャーモジュールのクラスが見つからない
 
-両方のXCFrameworkがプロジェクトに追加されているか確認してください：
-- `Shared.xcframework` - Koin初期化などの基盤
-- `Home.xcframework` - ホーム画面のUI/ロジック
+Sharedモジュールに含まれるべきクラス（Homeモジュールなど）が見つからない場合:
 
-両方が必要です。
+1. `shared/build.gradle.kts`で該当モジュールが`api`で依存されているか確認
+2. `afterEvaluate`ブロックで`export()`が設定されているか確認
+3. XCFrameworkを再ビルドして、Xcodeで更新
+
+```kotlin
+// shared/build.gradle.kts
+commonMain.dependencies {
+    api(projects.feature.home)  // apiで依存
+}
+
+afterEvaluate {
+    kotlin.targets.withType<KotlinNativeTarget>().configureEach {
+        binaries.withType<Framework>().configureEach {
+            export(projects.feature.home)  // iOSに公開
+        }
+    }
+}
+```
 
 ---
 
