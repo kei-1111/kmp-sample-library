@@ -1,7 +1,9 @@
-name: Release XCFramework
+name: iOS Release
 
 on:
   push:
+    branches:
+      - main
     tags:
       - 'v*'
 
@@ -29,48 +31,25 @@ jobs:
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
 
-      - name: Build and Package XCFrameworks
+      - name: Build and Package XCFramework
         run: |
-          ./gradlew :shared:packageXCFramework :feature:home:packageXCFramework
+          ./gradlew :shared:packageXCFramework
 
-      - name: Read checksums
-        id: checksums
+      - name: Read checksum
+        id: checksum
         run: |
           SHARED_CHECKSUM=$(cat shared/build/outputs/checksum.txt)
-          HOME_CHECKSUM=$(cat feature/home/build/outputs/checksum.txt)
           echo "shared_checksum=$SHARED_CHECKSUM" >> $GITHUB_OUTPUT
-          echo "home_checksum=$HOME_CHECKSUM" >> $GITHUB_OUTPUT
           echo "📋 Shared Checksum: $SHARED_CHECKSUM"
-          echo "📋 Home Checksum: $HOME_CHECKSUM"
 
-      - name: Update Package.swift with checksums
+      - name: Update Package.swift with checksum
         run: |
           VERSION="${GITHUB_REF_NAME#v}"
           SHARED_CHECKSUM=$(cat shared/build/outputs/checksum.txt)
-          HOME_CHECKSUM=$(cat feature/home/build/outputs/checksum.txt)
 
           # Package.swiftのバージョンとチェックサムを更新
           sed -i.bak "s|/releases/download/v[0-9.]*|/releases/download/v${VERSION}|g" Package.swift
-
-          # awkを使用してSharedとHomeのチェックサムを個別に更新
-          awk -v shared_checksum="$SHARED_CHECKSUM" -v home_checksum="$HOME_CHECKSUM" '
-          /name: "Shared"/ { in_shared = 1 }
-          /name: "Home"/ { in_shared = 0; in_home = 1 }
-          /checksum:/ {
-              if (in_shared) {
-                  print "            checksum: \"" shared_checksum "\""
-                  in_shared = 0
-                  next
-              } else if (in_home) {
-                  print "            checksum: \"" home_checksum "\""
-                  in_home = 0
-                  next
-              }
-          }
-          { print }
-          ' Package.swift > Package.swift.tmp
-
-          mv Package.swift.tmp Package.swift
+          sed -i.bak "s|checksum: \".*\"|checksum: \"${SHARED_CHECKSUM}\"|" Package.swift
           rm -f Package.swift.bak
 
           echo "✅ Package.swift を更新しました"
@@ -102,7 +81,6 @@ jobs:
         with:
           files: |
             shared/build/outputs/Shared.xcframework.zip
-            feature/home/build/outputs/Home.xcframework.zip
           body: |
             ## KMP Sample Library Release
 
@@ -113,18 +91,13 @@ jobs:
             1. Xcode → File → Add Package Dependencies
             2. リポジトリURL: `https://github.com/kei-1111/kmp-sample-library`
             3. バージョン: `${{ github.ref_name }}`を選択
-            4. 使用したいライブラリを選択（SharedまたはHome）
+            4. Sharedライブラリを選択
 
-            ### XCFramework Checksums
+            ### XCFramework Checksum
 
             **Shared:**
             ```
-            ${{ steps.checksums.outputs.shared_checksum }}
-            ```
-
-            **Home:**
-            ```
-            ${{ steps.checksums.outputs.home_checksum }}
+            ${{ steps.checksum.outputs.shared_checksum }}
             ```
 
             Package.swiftファイルを手動で更新する場合は、上記のchecksumを使用してください。
