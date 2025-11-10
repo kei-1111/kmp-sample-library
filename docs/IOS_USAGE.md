@@ -70,7 +70,7 @@ GitHubリリースからXCFrameworkを取得して使用します。
 1. Xcodeでプロジェクトを開く
 2. File → Add Package Dependencies
 3. 右上の検索バーに入力: `https://github.com/kei-1111/kmp-sample-library`
-4. バージョンを選択（例: `1.3.0`）
+4. バージョンを選択（例: `1.3.1`）
 5. `Add Package` をクリック
 6. **ライブラリを選択**: `Shared`
 7. ターゲットに追加
@@ -157,21 +157,21 @@ struct HomeScreen: View {
 ```toml
 [versions]
 # ...
-library = "1.3.0"  # 新しいバージョンに変更
+library = "1.3.1"  # 新しいバージョンに変更
 ```
 
 ### 2. 変更をコミット＆プッシュ
 
 ```bash
 git add gradle/libs.versions.toml
-git commit -m "chore: バージョンを1.3.0に更新"
+git commit -m "chore: バージョンを1.3.1に更新"
 git push origin main
 ```
 
 ### 3. タグを作成してプッシュ
 
 ```bash
-git tag v1.3.0
+git tag v1.3.1
 git push origin --tags
 ```
 
