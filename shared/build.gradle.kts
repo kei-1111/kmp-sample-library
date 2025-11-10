@@ -1,5 +1,6 @@
 plugins {
     alias(libs.plugins.kmp.sample.library.kmp.library)
+    alias(libs.plugins.skie)
 }
 
 kotlin {
