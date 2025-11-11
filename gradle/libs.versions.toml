@@ -18,7 +18,7 @@ serialization = "2.2.0"
 serializationJson = "1.8.1"
 
 # kmp-sample-libraryのバージョン
-library = "1.4.2"
+library = "1.4.3"
 
 [libraries]
 androidx-appcompat = { module = "androidx.appcompat:appcompat", version.ref = "androidxAppcompat" }
