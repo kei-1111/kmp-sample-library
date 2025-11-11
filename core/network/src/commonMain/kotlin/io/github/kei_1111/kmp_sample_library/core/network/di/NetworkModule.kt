@@ -9,5 +9,5 @@ import org.koin.dsl.module
 
 val networkModule = module {
     single { HttpClientFactory.create() }
-    singleOf(::MarsApiServiceImpl) bind MarsApiService::class
+    single<MarsApiService> { MarsApiServiceImpl(get()) }
 }

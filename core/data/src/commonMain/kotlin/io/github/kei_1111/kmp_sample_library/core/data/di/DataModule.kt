@@ -7,5 +7,5 @@ import org.koin.dsl.bind
 import org.koin.dsl.module
 
 val dataModule = module {
-    singleOf(::MarsRepositoryImpl) bind MarsRepository::class
+    single<MarsRepository> { MarsRepositoryImpl(get()) }
 }
