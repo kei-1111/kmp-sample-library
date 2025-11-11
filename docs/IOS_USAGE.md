@@ -35,7 +35,7 @@
 ### 1. XCFrameworkをビルド
 
 ```bash
-./gradlew :shard:assembleSharedReleaseXCFramework
+./gradlew :shared:assembleSharedReleaseXCFramework --no-configuration-cache
 ```
 
 ビルドされたファイル:
