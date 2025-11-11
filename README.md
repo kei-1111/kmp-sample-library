@@ -2,9 +2,6 @@
 
 AndroidとiOSをターゲットとしたKotlin Multiplatform (KMP)ライブラリです。Clean Architectureの原則に従い、レイヤー化されたフィーチャーベースのモジュール構造を採用しています。
 
-[![Version](https://img.shields.io/badge/version-1.1.1-blue.svg)](https://github.com/kei-1111/kmp-sample-library/packages)
-[![Kotlin](https://img.shields.io/badge/kotlin-2.2.0-purple.svg)](https://kotlinlang.org)
-
 ## 📦 インストール
 
 各プラットフォームでの使用方法については、[ANDROID_USAGE.md](ANDROID_USAGE.md)、[IOS_USAGE.md](IOS_USAGE.md)を参照してください。
