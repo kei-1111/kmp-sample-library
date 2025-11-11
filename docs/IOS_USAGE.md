@@ -172,7 +172,7 @@ git push origin main
 
 ```bash
 git tag v1.3.1
-git push origin --tags
+git push origin v1.3.1
 ```
 
 **これだけです！** あとはGitHub Actionsが自動的にすべて実行します。
