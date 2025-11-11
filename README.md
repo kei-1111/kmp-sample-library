@@ -4,7 +4,7 @@ AndroidとiOSをターゲットとしたKotlin Multiplatform (KMP)ライブラ�
 
 ## 📦 インストール
 
-各プラットフォームでの使用方法については、[ANDROID_USAGE.md](ANDROID_USAGE.md)、[IOS_USAGE.md](IOS_USAGE.md)を参照してください。
+各プラットフォームでの使用方法については、[ANDROID_USAGE.md](docs/ANDROID_USAGE.md)、[IOS_USAGE.md](docs/IOS_USAGE.md)を参照してください。
 
 ## 🚀 実装例：Mars Real Estate API
 
@@ -197,6 +197,6 @@ GitHub Actionsワークフローがmainブランチへのpush時に自動実行�
 
 ## 📖 ドキュメント
 
-- [Android使用方法](ANDROID_USAGE.md) - Android側での使用方法
-- [iOS使用方法](IOS_USAGE.md) - iOS側での使用方法
+- [Android使用方法](docs/ANDROID_USAGE.md) - Android側での使用方法
+- [iOS使用方法](docs/IOS_USAGE.md) - iOS側での使用方法
 - [CLAUDE.md](CLAUDE.md) - AI開発支援ツール用のプロジェクトガイド
