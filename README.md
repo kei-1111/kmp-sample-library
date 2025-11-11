@@ -182,7 +182,7 @@ android {
 ```kotlin
 // di/YourModule.kt
 val yourModule = module {
-    singleOf(::YourRepositoryImpl) bind YourRepository::class
+    single<YourRepository> { YourRepositoryImpl(get(), ...) }
 }
 ```
 
