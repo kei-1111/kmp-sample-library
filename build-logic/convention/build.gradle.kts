@@ -42,5 +42,9 @@ gradlePlugin {
             id = libs.plugins.kmp.sample.library.publish.get().pluginId
             implementationClass = "PublishPlugin"
         }
+        register("xcframework") {
+            id = libs.plugins.kmp.sample.library.xcframework.get().pluginId
+            implementationClass = "XCFrameworkPlugin"
+        }
     }
 }
